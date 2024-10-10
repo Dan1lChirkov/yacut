@@ -1,6 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, URLField, SubmitField
-from wtforms.validators import DataRequired, Optional, Length
+from wtforms.validators import DataRequired, Optional, Length, Regexp
+
+from .constants import LINK_REGEX
 
 
 class UrlMapForm(FlaskForm):
@@ -12,7 +14,11 @@ class UrlMapForm(FlaskForm):
         'Вариант короткой ссылки',
         validators=[
             Optional(),
-            Length(1, 16)
+            Length(1, 16),
+            Regexp(
+                regex=LINK_REGEX,
+                message='Допустимы только символы "a-Z"'
+            )
         ]
     )
     submit = SubmitField('Добавить')

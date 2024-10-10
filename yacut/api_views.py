@@ -1,6 +1,7 @@
 import re
 
 from flask import jsonify, request
+from http import HTTPStatus
 
 from . import app, db
 from .models import URLMap
@@ -33,13 +34,13 @@ def creare_short_link():
     new_url.from_dict(data)
     db.session.add(new_url)
     db.session.commit()
-    return jsonify(new_url.to_dict()), 201
+    return jsonify(new_url.to_dict()), HTTPStatus.CREATED
 
 
 @app.route('/api/id/<short_id>/', methods=['GET'])
 def get_original_url(short_id):
     url_obj = URLMap.query.filter(URLMap.short == short_id).first()
     if not url_obj:
-        raise InvaldiAPIUsage('Указанный id не найден', 404)
+        raise InvaldiAPIUsage('Указанный id не найден', HTTPStatus.NOT_FOUND)
     original_url = url_obj.original
-    return jsonify({'url': original_url}), 200
+    return jsonify({'url': original_url}), HTTPStatus.OK
