@@ -21,8 +21,9 @@ def get_unique_short_id():
         return short_id
     count += 1
     if count == MAX_TURNS:
+        form = UrlMapForm()
         flash('Что-то пошло не так, попробуйте снова(')
-        return render_template('index.html')
+        return render_template('index.html', form=form)
     return get_unique_short_id()
 
 
